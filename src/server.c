@@ -3371,8 +3371,8 @@ void initServer(void) {
  * Thread Local Storage initialization collides with dlopen call.
  * see: https://sourceware.org/bugzilla/show_bug.cgi?id=19329 */
 void InitServerLast() {
-    bioInit();
-    initThreadedIO();
+    // bioInit();
+    // initThreadedIO();
     set_jemalloc_bg_thread(server.jemalloc_bg_thread);
     server.initial_memory_usage = zmalloc_used_memory();
 }
@@ -6153,7 +6153,14 @@ redisTestProc *getTestProcByName(const char *name) {
 }
 #endif
 
-int main(int argc, char **argv) {
+int main() {
+
+    int argc = 2; 
+
+    char *argv[2];
+    argv[0] = "redis-server";
+    argv[1] = "redis.conf";
+
     struct timeval tv;
     int j;
     char config_from_stdin = 0;
@@ -6359,7 +6366,7 @@ int main(int argc, char **argv) {
         moduleLoadFromQueue();
         ACLLoadUsersAtStartup();
         InitServerLast();
-        loadDataFromDisk();
+        // loadDataFromDisk();
         if (server.cluster_enabled) {
             if (verifyClusterConfigWithData() == C_ERR) {
                 serverLog(LL_WARNING,
